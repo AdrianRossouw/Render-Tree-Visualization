@@ -4,6 +4,7 @@
   var ROUND_TRANSFORM_DECIMALPLACES = 3
   var width = innerWidth,
       height = innerHeight;
+  var id = 0
 
   vis(window.context, document.body)
 
@@ -16,7 +17,7 @@
     context.x = context.px = width / 2
     context.y = context.py = 0
     context.parent = context
-    context.id = 1
+    context.id = ++id
 
     var root = context,
         nodes = tree(root)
@@ -160,7 +161,7 @@
     return obj
   }
 
-  traverse.id = 2
+
 
   function nodeFill(d) {
     if (d._isRenderable) {
@@ -208,18 +209,13 @@
   }
 
   function traverse(d) {
-    d.children = d.children || []
     if (d && d._object && d._object._node) return traverse(d._object._node)
     if (d._node) return traverse(d._node)
     var children = d._child ? (Array.isArray(d._child) ? d._child: [d._child]) : []
     if (d._isRenderable) d._object.on('mouseover', function () { sync.eventFired(d) })
-    children.forEach(function (child) { child.px = d.x; child.py = d.y; child.id = (child.id || (traverse.id += 1) ) })
-    //if ((d._object || {}).pipe)  subscribe(d._object, d)
-    for(var x in d) {
-      // if (d[x] && d[x].constructor.name.match(/View/))
-      //   console.log(d)
-    }
-    d.children = children
+    d.id = d.id || (id += 1)
+    children.forEach(function (child) { child.px = d.x; child.py = d.y;  })
+    if ((d._object || {}).pipe)  subscribe(d._object, d)
     return children//.map(Object.create)
   }
 
