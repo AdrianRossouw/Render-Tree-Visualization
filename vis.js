@@ -47,17 +47,6 @@
                .on('out', function () { desc.transition().style('opacity', 0) })
 
     function update(delay) {
-      var registry = (node.data() || []).reduce(function (a, b) {
-                       a[b.id] = b
-                       return a
-                     }, {})
-      registry[0] = context
-
-      window.findNode = function (id) {
-        return registry[id]
-      }
-      window.findNode.registry = registry
-
       node = node.data(nodes = tree.nodes(root), function (d) { return d.id })
       link = link.data(tree.links(nodes), function (d) { return d.source.id  + ':' + d.target.id })
 
