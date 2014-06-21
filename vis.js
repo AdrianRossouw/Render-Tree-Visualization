@@ -4,7 +4,8 @@
   var ROUND_TRANSFORM_DECIMALPLACES = 3
   var width = innerWidth,
       height = innerHeight;
-  var id = 0
+    var id = -1
+    var registry = {}
 
   vis(window.context, document.body)
 
@@ -115,7 +116,7 @@
         })
       })
       t.each('end', function (d, i) {
-        if (1+i == n.size()) update(function (d, i) { return 0 })
+        if (i == n.size()-1) update(function (d, i) { return 0 })
       })
     }
   }
@@ -198,18 +199,27 @@
   }
 
   function traverse(d) {
-    if (d && d._object && d._object._node) return traverse(d._object._node)
-    if (d._node) return traverse(d._node)
-    var children = d._child ? (Array.isArray(d._child) ? d._child: [d._child]) : []
-    if (d._isRenderable) d._object.on('mouseover', function () { sync.eventFired(d) })
-    d.id = d.id || (id += 1)
-    children.forEach(function (child) { child.px = d.x; child.py = d.y;  })
-    if ((d._object || {}).pipe)  subscribe(d._object, d)
-    return children//.map(Object.create)
+      d.id = d.id || (id++)
+      registry[d.id] = d
+        var children = (d._node && d._node._child) ? d._node._child : d._child
+        if (d._object && d._object.context) {
+            children = d.children = d._object.context
+        }
+
+      children = children || []
+      d.children = children.map ? children : [children]
+      console.log(d.children)
+      d.children.forEach(function (child) {
+          child.px = d.x; child.py = d.y;
+          if (child._isRenderable) child._object.on('mouseover', function () { sync.eventFired(d) })
+          if ((child._object || {}).pipe)  subscribe(child._object, d)
+      })
+
+    return d.children
   }
 
-  var identities = {
-    translate: '0,0,0', rotate: '0,0,0', scale: '1,1,1', skew: '0,0,0'
+  var identities = { 
+   translate: '0,0,0', rotate: '0,0,0', scale: '1,1,1', skew: '0,0,0'
   }
 
   function  processTransform(obj) {
