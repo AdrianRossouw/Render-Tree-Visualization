@@ -1,4 +1,4 @@
-;(function () {
+javascript:(function () {
   inject('http://d3js.org/d3.v3.min.js')
 
   if (window.context)
