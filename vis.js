@@ -46,20 +46,19 @@
                .on('out', function () { desc.transition().style('opacity', 0) })
 
     function update(delay) {
-      node = node.data(nodes = tree.nodes(root), function (d) { return d.id })
-      link = link.data(tree.links(nodes), function (d) { return d.source.id  + ':' + d.target.id })
-
       var registry = (node.data() || []).reduce(function (a, b) {
                        a[b.id] = b
                        return a
                      }, {})
       registry[0] = context
 
-      window.node = function (id) {
-        console.log(id)
+      window.findNode = function (id) {
         return registry[id]
       }
-      window.node.registry = registry
+      window.findNode.registry = registry
+
+      node = node.data(nodes = tree.nodes(root), function (d) { return d.id })
+      link = link.data(tree.links(nodes), function (d) { return d.source.id  + ':' + d.target.id })
 
       node.enter().append("circle")
       .attr("class", "node")
@@ -215,7 +214,7 @@
     var children = d._child ? (Array.isArray(d._child) ? d._child: [d._child]) : []
     if (d._isRenderable) d._object.on('mouseover', function () { sync.eventFired(d) })
     children.forEach(function (child) { child.px = d.x; child.py = d.y; child.id = (child.id || (traverse.id += 1) ) })
-    if ((d._object || {}).pipe)  subscribe(d._object, d)
+    //if ((d._object || {}).pipe)  subscribe(d._object, d)
     for(var x in d) {
       // if (d[x] && d[x].constructor.name.match(/View/))
       //   console.log(d)
