@@ -5,7 +5,6 @@
   var width = innerWidth,
       height = innerHeight;
 
-
   vis(window.context)
 
   function vis(context, container) {
@@ -50,7 +49,7 @@
       node = node.data(nodes = tree.nodes(root), function (d) { return d.id })
       link = link.data(tree.links(nodes), function (d) { return d.source.id  + ':' + d.target.id })
 
-      var registry = node.data().reduce(function (a, b) {
+      var registry = (node.data() || []).reduce(function (a, b) {
                        a[b.id] = b
                        return a
                      }, {})
