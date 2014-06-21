@@ -1,11 +1,12 @@
 ;(function () {
-  vis(window.context)
   var sync = d3.dispatch("eventFired")
   var subscriptions = []
   var ROUND_TRANSFORM_DECIMALPLACES = 3
   var width = innerWidth,
       height = innerHeight;
 
+
+  vis(window.context)
 
   function vis(context, container) {
     var tree = d3.layout.tree()
