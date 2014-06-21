@@ -1,16 +1,8 @@
 ;(function () {
-  window.vis = bootstrap
+  vis(window.context)
   var sync = d3.dispatch("eventFired")
 
   var ROUND_TRANSFORM_DECIMALPLACES = 3
-
-  function bootstrap (ctx, container) {
-    require.config({ paths: { d3: "http://d3js.org/d3.v3" } });
-    require(['d3'], function (d3) {
-      window.d3 = d3
-      vis(ctx || window.ctx || window.context, container || document.body)
-    })
-  }
 
   function vis(context, container) {
     var width = innerWidth,

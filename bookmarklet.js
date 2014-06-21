@@ -11,4 +11,4 @@ javascript:(function () {
     s.src = src;
     document.head.appendChild(s);
   }
-})
+})()
