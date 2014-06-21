@@ -1,13 +1,13 @@
 ;(function () {
   vis(window.context)
   var sync = d3.dispatch("eventFired")
-
+  var subscriptions = []
   var ROUND_TRANSFORM_DECIMALPLACES = 3
+  var width = innerWidth,
+      height = innerHeight;
+
 
   function vis(context, container) {
-    var width = innerWidth,
-        height = innerHeight;
-
     var tree = d3.layout.tree()
                .size([width - 20, height - 20])
                .children(traverse)
@@ -135,8 +135,6 @@
     if (node._isRenderable) {
       return {
         transform: node._object._matrix,
-        //origin: node._object._origin,
-        //size: node._object._size,
         type: node._object.constructor.name
       }
     }
@@ -202,7 +200,6 @@
 
   function delay (d) { return (d.depth == null ? 1 + d.source.depth : d.depth) * 500 }
 
-  var subscriptions = []
   function subscribe(emitter, renderNode) {
     if (subscriptions.indexOf(emitter) == -1) subscriptions.push(emitter)
     else return
