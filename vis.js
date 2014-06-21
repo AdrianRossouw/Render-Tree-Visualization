@@ -5,7 +5,7 @@
   var width = innerWidth,
       height = innerHeight;
 
-  vis(window.context)
+  vis(window.context, document.body)
 
   function vis(context, container) {
     var tree = d3.layout.tree()
