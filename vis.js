@@ -208,7 +208,6 @@
 
       children = children || []
       d.children = children.map ? children : [children]
-      console.log(d.children)
       d.children.forEach(function (child) {
           child.px = d.x; child.py = d.y;
           if (child._isRenderable) child._object.on('mouseover', function () { sync.eventFired(d) })
