@@ -1,4 +1,5 @@
 ;(function () {
+  var d3 = window.d3  || require('d3')
   var sync = d3.dispatch("eventFired")
   var subscriptions = []
   var ROUND_TRANSFORM_DECIMALPLACES = 3
