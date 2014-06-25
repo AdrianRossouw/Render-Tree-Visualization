@@ -20,7 +20,7 @@ define(['d3'], function (d3) {
             height = (container.offsetHeight || innerHeight) - 100;
 
         var tree = d3.layout.tree()
-                .size([width - 20, height - 20])
+                .size([width - 20, height - 100])
                 .children(traverse)
 
         context.constructor  = {name: 'Context'}
@@ -41,6 +41,7 @@ define(['d3'], function (d3) {
                 .style('position', 'absolute')
                 .style('top', '0px')
                 .style('left', '0px')
+                .style('padding-top', '10px')
                 .style('z-index', 123123)
 
         var node = svg.selectAll(".node"),
@@ -173,7 +174,7 @@ define(['d3'], function (d3) {
             if (d.classList) return 'indianred'
             if (obj.constructor.name.match(/view/i)) return 'orange'
             if (obj.constructor.name.match(/Surface/i)) return 'indianred'
-            if (d._isModifier || obj._modifier) return 'blue'
+            if (d._isModifier || obj._modifier) return 'steelblue'
             if (d.constructor.name === 'Context') return 'darkgreen'
         }
 
