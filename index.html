@@ -5,7 +5,6 @@
   --Tree Visualizer</a> -->
 
 <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-<iframe src="examples/FlexibleLayout.html" height="800px" width="1000px"></iframe>
 <div>
 	<a>Context & surface</a>
 	<a>Context & modifier & surface</a>
@@ -19,7 +18,8 @@
 	<a>Scrollview</a>
 	<a style="display:none;">Lightbox & Slideshow</a>
 </div>
-<div>
+<iframe src="" height="800px" width="1000px"></iframe>
+<div class="source">
 	<pre><code></code></pre>
 </div>
 <style>
@@ -31,10 +31,22 @@
 	float: left;
 	display: inline;
 	}
+	iframe {
+  	border: none;
+		}
+
+		.source {
+		margin: 0 auto;
+		float: none;
+		}
+		
 </style>
 <script>
-	var iframe = document.querySelector('iframe');
-	[].forEach.call(document.querySelectorAll('div a'), linky)
+	var iframe = document.querySelector('iframe')
+	var links = document.querySelectorAll('div a')
+	iframe.width = innerWidth - 200
+	;[].forEach.call(links, linky)
+	links[6].click()
 	
 	function linky(link) {
 	var text = link.textContent.replace(/&/g, '').replace(/\s/g, '')
@@ -59,7 +71,7 @@
 		
 		function parseHTML(html) {
 		  var arr = html.split('\n')
-		  return arr.slice(5, arr.length - 6).join('\n') 
+		  return arr.slice(6, arr.length - 6).join('\n') 
 		}
 			
 //TODO 

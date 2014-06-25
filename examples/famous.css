@@ -45,6 +45,7 @@ body {
     -webkit-backface-visibility: visible;
     backface-visibility: visible;
     pointer-events: none;
+    width: 50%;
 }
 
 .famous-group {
@@ -75,3 +76,15 @@ body {
     width: 100%;
     height: 100%;
 }
+
+svg {
+    width: 50%;
+    left: 50%;
+}
+
+
+
+
+.grey-bg { background: grey; }
+.red-bg { background: red; }
+.red-bg { background: red; }

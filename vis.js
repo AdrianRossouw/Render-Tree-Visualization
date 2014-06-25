@@ -16,10 +16,10 @@ define(['d3'], function (d3) {
             log: true,
             container: document.body
         }, options || {})
-        
+
         context = context || window.context || window.ctx
 
-        var width = options.width || options.container.offsetWidth || innerWidth
+        var width = (options.width || options.container.offsetWidth || innerWidth) * .5
         var height = (options.width || options.container.offsetHeight || innerHeight) - 100;
 
         var tree = d3.layout.tree()
@@ -38,12 +38,9 @@ define(['d3'], function (d3) {
         var diagonal = d3.svg.diagonal()
 
         var svg = d3.select(options.container).append('svg')
-                .attr("width", width)
                 .attr("height", height)
                 .style('background', 'rgba(255, 255, 255, .5)')
                 .style('position', 'absolute')
-                .style('top', '0px')
-                .style('left', '0px')
                 .style('padding-top', '10px')
                 .style('z-index', 123123)
 
@@ -56,7 +53,7 @@ define(['d3'], function (d3) {
                 .style({
                     position: 'absolute',
                     top: '0px',
-                    left: '10px',
+                    left: svg.node().offsetLeft,
                     color: '#333',
                     padding: '5px',
                     'font-family': 'Helvetica'
@@ -76,8 +73,8 @@ define(['d3'], function (d3) {
                 .attr("r", 0)
                 .attr('stroke', 'white')
                 .on('mouseover', function (d) {
-                    console.log(d)
                     d3.select(this).interrupt().attr('r', 20)
+                    console.log(d)
                     desc.on('hover').call(desc, d)
                 })
                 .on('mouseout', function () {
@@ -125,10 +122,6 @@ define(['d3'], function (d3) {
                         .attr('r', 35)
                         .attr('opacity', 0)
                         .remove()
-                    // var mmm = d3.select(this).attr('fill', 'steelblue')
-                    // cmp._object.on('mouseout', function (d) {
-                    //   mmm.attr('fill', nodeFill)
-                    // })
                 })
             })
             t.each('end', function (d, i) {
@@ -137,10 +130,11 @@ define(['d3'], function (d3) {
         }
 
         function nodeContents(node) {
-            if (node._isRenderable) {
+            var surface = (node._isRenderable && node._object) || (node.render && 'number'== typeof node.render()  && node)
+            if (surface) {
                 return {
-                    transform: node._object._matrix,
-                    type: node._object.constructor.name
+                    transform: surface._matrix,
+                    type: surface.constructor.name
                 }
             }
 
@@ -156,7 +150,6 @@ define(['d3'], function (d3) {
         }
 
         function extend (a, b) {
-
             Object.keys(b).forEach(function (k) { a[k] = b[k] })
             return a
         }
@@ -166,7 +159,6 @@ define(['d3'], function (d3) {
             for(var key in obj) if (null == obj[key]) delete obj[key]
             processTransform(obj)
             if (obj.opacity === 1) delete obj.opacity
-
             delete obj.target
             return obj
         }
@@ -187,7 +179,7 @@ define(['d3'], function (d3) {
             this.interrupt().style('opacity', 1)
 
             var out = Object.keys(model).map(function (k) {
-                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + model[k] + '</div>'
+                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + JSON.stringify(model[k])  + '</div>'
             })
                     .join('')
             this.html(out)
@@ -244,7 +236,7 @@ define(['d3'], function (d3) {
                 for(var k in obj)
                     if ((obj[k] || {}).add) children.push(obj[k])
             }
-
+            
             return children
         }
 
@@ -253,7 +245,7 @@ define(['d3'], function (d3) {
         }
 
         function  processTransform(obj) {
-            var mat = obj.transform || '1000010000100001'.split('')
+            var mat = obj.transform || obj._matrix || '1000010000100001'.split('')
             delete obj.transform
             if (mat && mat.join('') == '1000010000100001') return
             var decompose = Transform.interpret(mat)
@@ -262,7 +254,7 @@ define(['d3'], function (d3) {
                 if (decompose[i].filter(function (d) { return ! (isNaN(d) || d == null) }).length < 3) delete decompose[i]
                 else decompose[i] = decompose[i].map(function (val) { return Math.round(val * 100) / 100 }).join(', ')
             }
-            extend(obj, decompose)
+            extend(obj,decompose) 
         }
         function trackEvents() {}
         function identity (d) { return d }
