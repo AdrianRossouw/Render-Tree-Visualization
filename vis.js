@@ -4,15 +4,16 @@ require.config({
   }
 });
 define(['d3'], function (d3) {
-    var sync = d3.dispatch("eventFired")
-    var subscriptions = []
     var ROUND_TRANSFORM_DECIMALPLACES = 3
-    var id = -1
-    var registry = []
     
     return vis
 
     function vis(context, container) {
+        var sync = d3.dispatch("eventFired")
+        var subscriptions = []
+        var id = -1
+        var registry = []
+
         context = context || window.context || window.ctx
         container = container || document.body
 
