@@ -11,7 +11,7 @@ var Engine = require('famous/core/Engine')
 var Modifier = require('famous/core/Modifier')
 var vis = require('vis')
 
-var twigs = [ctx.add(new Modifier)]
+bvar twigs = [ctx.add(new Modifier)]
 
 var ctx = Engine.createContext()
 vis(ctx)

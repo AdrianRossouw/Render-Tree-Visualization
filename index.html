@@ -19,6 +19,9 @@
 	<a>Scrollview</a>
 	<a style="display:none;">Lightbox & Slideshow</a>
 </div>
+<div>
+	<pre><code></code></pre>
+</div>
 <style>
 	a {
 	display: block;
@@ -38,10 +41,27 @@
 	link.href = '#' + text
 	
 	link.addEventListener('click', function (e) {
-	e.preventDefault()
-	iframe.src = "examples/" + text  + '.html'
+    e.preventDefault()
+	  var src ="examples/" + text  + '.html'
+  	iframe.src = src
+		fetch(src, function () {
+
+		document.querySelector('code').textContent = parseHTML(this.responseText) })
   })
 	}
+
+	function fetch (url, cb) {
+   	var get = new XMLHttpRequest()
+		get.onload = cb
+		get.open('get', window.location.origin + '/' + url)
+		get.send()
+		}
+		
+		function parseHTML(html) {
+		  var arr = html.split('\n')
+		  return arr.slice(5, arr.length - 6).join('\n') 
+		}
+			
 //TODO 
 //tooltip
 //add a dynamic tree

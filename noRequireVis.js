@@ -247,7 +247,7 @@ function RenderTreeVisualizer(context, options) {
         var mat = obj.transform || '1000010000100001'.split('')
         delete obj.transform
         if (mat && mat.join('') == '1000010000100001') return
-        if (! Transform && ! (Transform = require('famous/core/Transform'))) 
+        if (! Transform && require && ! (Transform = require('famous/core/Transform'))) 
             return
         var decompose = Transform.interpret(mat)
         for(var i in identities) {
