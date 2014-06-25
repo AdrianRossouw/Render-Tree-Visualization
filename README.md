@@ -23,12 +23,13 @@ vis(ctx)
 })()
 ```
 
-the vis function takes 3 arguments
+the vis function takes 2 arguments
 [required]the context or renderNode
-[optional]a DOM container to be contained in 
-[optional]some options...?
-
-
+[optional]an object enumerating a list of choices including
+log: console.log a renderNode on hover
+container: where the tree should be appended to
+width: how wide the tree should be. defaults to the width of the container or window.width
+height: how tall the tree should be. defaults to the width of the container or window.height
 
 ##Caveats
 Currently breaks on minified builds of famous because constructor names get

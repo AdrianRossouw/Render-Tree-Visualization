@@ -7,16 +7,20 @@ define(['d3'], function (d3) {
     var ROUND_TRANSFORM_DECIMALPLACES = 3
     var Transform = require('famous/core/Transform')
     
-    return function RenderTreeVisualizer(context, container) {
+    return function RenderTreeVisualizer(context, options) {
         var sync = d3.dispatch("eventFired")
         var subscriptions = []
         var registry = []
 
+        options = extend({
+            log: true,
+            container: document.body
+        }, options || {})
+        
         context = context || window.context || window.ctx
-        container = container || document.body
 
-        var width = container.offsetWidth || innerWidth,
-            height = (container.offsetHeight || innerHeight) - 100;
+        var width = options.width || options.container.offsetWidth || innerWidth
+        var height = (options.width || options.container.offsetHeight || innerHeight) - 100;
 
         var tree = d3.layout.tree()
                 .size([width - 20, height - 100])
@@ -33,7 +37,7 @@ define(['d3'], function (d3) {
 
         var diagonal = d3.svg.diagonal()
 
-        var svg = d3.select(container).append('svg')
+        var svg = d3.select(options.container).append('svg')
                 .attr("width", width)
                 .attr("height", height)
                 .style('background', 'rgba(255, 255, 255, .5)')
@@ -54,7 +58,8 @@ define(['d3'], function (d3) {
                     top: '0px',
                     left: '10px',
                     color: '#333',
-                    padding: '5px',                                                                                                                                                                                                                                                                                                                                                           'font-family': 'Helvetica'
+                    padding: '5px',
+                    'font-family': 'Helvetica'
                 })
                 .on('hover', formatDesc)
                 .on('out', function () { desc.transition().style('opacity', 0) })
@@ -71,6 +76,7 @@ define(['d3'], function (d3) {
                 .attr("r", 0)
                 .attr('stroke', 'white')
                 .on('mouseover', function (d) {
+                    console.log(d)
                     d3.select(this).interrupt().attr('r', 20)
                     desc.on('hover').call(desc, d)
                 })
@@ -132,7 +138,6 @@ define(['d3'], function (d3) {
 
         function nodeContents(node) {
             if (node._isRenderable) {
-                console.log('hi')
                 return {
                     transform: node._object._matrix,
                     type: node._object.constructor.name
