@@ -72,12 +72,11 @@ define(['d3'], function (d3) {
                 .attr("r", 0)
                 .attr('stroke', 'white')
                 .on('mouseover', function (d) {
-                    console.log(d)
-                    zoomCircle(this, 20)
+                    d3.select(this).interrupt().attr('r', 20)
                     desc.on('hover').call(desc, d)
                 })
                 .on('mouseout', function () {
-                    zoomCircle(this, 10)
+                    d3.select(this).interrupt().transition().attr('r', 10)
                     desc.on('out')()
                 })
 
@@ -134,6 +133,7 @@ define(['d3'], function (d3) {
 
         function nodeContents(node) {
             if (node._isRenderable) {
+                console.log('hi')
                 return {
                     transform: node._object._matrix,
                     type: node._object.constructor.name
@@ -262,15 +262,5 @@ define(['d3'], function (d3) {
         }
         function trackEvents() {}
         function identity (d) { return d }
-        function zoomCircle(node, val) {
-            d3.transition().duration(750).call(function (transition) {
-                transition.tween(function () {
-                    return function (i) {
-                        node.attr('r', 10 + (10 * i))
-                    }
-
-                })
-            })
-        }
     }
 })
