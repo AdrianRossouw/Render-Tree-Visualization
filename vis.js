@@ -10,7 +10,6 @@ define(['d3'], function (d3) {
     return function RenderTreeVisualizer(context, container) {
         var sync = d3.dispatch("eventFired")
         var subscriptions = []
-        var id = -1
         var registry = []
 
         context = context || window.context || window.ctx
@@ -27,7 +26,7 @@ define(['d3'], function (d3) {
         context.x = context.px = width / 2
         context.y = context.py = 0
         context.parent = context
-        context.id = ++id
+        context._id = 0
 
         var root = context,
             nodes = tree(root)
@@ -61,8 +60,8 @@ define(['d3'], function (d3) {
                 .on('out', function () { desc.transition().style('opacity', 0) })
 
         function update(delay) {
-            node = node.data(nodes = tree.nodes(root), function (d) { return d.id })
-            link = link.data(tree.links(nodes), function (d) { return d.source.id  + ':' + d.target.id })
+            node = node.data(nodes = tree.nodes(root), function (d) { return d._id })
+            link = link.data(tree.links(nodes), function (d) { return d.source._id  + ':' + d.target._id })
 
             node.enter().append("circle")
                 .attr("class", "node")
@@ -215,7 +214,7 @@ define(['d3'], function (d3) {
         }
 
         function traverse(d) {
-            d.id = registry.push(d)
+            d._id = registry.push(d)
 
             //TODO handle viewSEQ
             if (d._) return d._.array//.map(Object.create)
