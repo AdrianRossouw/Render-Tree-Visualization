@@ -134,7 +134,10 @@ define(['d3'], function (d3) {
             if (surface) {
                 return {
                     transform: surface._matrix,
-                    type: surface.constructor.name
+                    type: surface.constructor.name,
+                    content: surface.content, 
+                    size: surface._size
+                    //properties: surface.properties, 
                 }
             }
 
@@ -144,8 +147,7 @@ define(['d3'], function (d3) {
                              )
             }
 
-            return {
-                type: node.constructor.name
+            return { type: node.constructor.name
             }
         }
 
@@ -179,9 +181,8 @@ define(['d3'], function (d3) {
             this.interrupt().style('opacity', 1)
 
             var out = Object.keys(model).map(function (k) {
-                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + JSON.stringify(model[k])  + '</div>'
-            })
-                    .join('')
+                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + JSON.stringify(model[k], null, 2)  + '</div>'
+            }).join('')
             this.html(out)
         }
 
@@ -252,7 +253,7 @@ define(['d3'], function (d3) {
             for(var i in identities) {
                 if (decompose[i].join(',') == identities[i]) { delete decompose[i]; continue }
                 if (decompose[i].filter(function (d) { return ! (isNaN(d) || d == null) }).length < 3) delete decompose[i]
-                else decompose[i] = decompose[i].map(function (val) { return Math.round(val * 100) / 100 }).join(', ')
+                else decompose[i] = decompose[i].map(function (val) { return Math.round(val * 100) / 100 }).join(',')
             }
             extend(obj,decompose) 
         }
