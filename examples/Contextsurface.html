@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<script src="http://famo.us/lib/alameda.min.js"></script>
+		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
+		<script>
+			require(['../vis', 'famous/core/Engine', 'famous/core/Surface'], function (vis, Engine, Surface) {
+				var mainContext = Engine.createContext();
+
+				var firstSurface = new Surface({
+				  size: [200, 400],
+				  content: 'hello world',
+				  properties: {
+				    color: 'white',
+				    textAlign: 'center',
+				    backgroundColor: '#FA5C4F'
+				  }
+				});
+
+				mainContext.add(firstSurface);
+
+				vis(mainContext)
+			})
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

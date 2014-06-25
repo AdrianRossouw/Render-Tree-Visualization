@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<script src="http://famo.us/lib/alameda.min.js"></script>
+		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
+		<script>
+			require(['famous/core/Engine', 'famous/core/Modifier', 'famous/views/HeaderFooterLayout', 'famous/core/Surface', '../vis.js'], function (Engine, Modifier, HeaderFooterLayout, Surface, vis) {
+			var mainContext = Engine.createContext();
+			vis(mainContext)
+			var layout = new HeaderFooterLayout();
+
+			layout.header.add(new Surface({
+      	size: [undefined, 100],
+			  content: "Header",
+			  classes: ["red-bg"],
+			  properties: {
+			    lineHeight: "100px",
+			    textAlign: "center"
+			  }
+			}));
+
+			layout.content.add(new Surface({
+			  content: "Content",
+			  classes: ["grey-bg"],
+			  properties: {
+			    lineHeight: '400px',
+			    textAlign: "center"
+			  }
+			}));
+
+			layout.footer.add(new Surface({
+			  size: [undefined, 50],
+			  content: "Footer",
+			  classes: ["red-bg"],
+			  properties: {
+			    lineHeight: "50px",
+			    textAlign: "center"
+			  }
+			}));
+
+			mainContext.add(layout);
+			
+			})
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

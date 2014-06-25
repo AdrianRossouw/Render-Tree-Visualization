@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<script src="http://famo.us/lib/alameda.min.js"></script>
+		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
+		<script>
+			require(['../vis', 'famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/GridLayout'], function (vis, Engine, StateModifier, Surface, GridLayout) {
+			var mainContext = Engine.createContext();
+			vis(mainContext)
+
+			var grid = new GridLayout({
+			  dimensions: [4, 2]
+			});
+
+			var surfaces = [];
+			grid.sequenceFrom(surfaces);
+
+			for(var i = 0; i < 8; i++) {
+			  surfaces.push(new Surface({
+			    content: "panel " + (i + 1),
+			    size: [undefined, undefined],
+			    properties: {
+			      backgroundColor: "hsl(" + (i * 360 / 8) + ", 100%, 50%)",
+			      color: "#404040",
+			      lineHeight: '200px',
+			      textAlign: 'center'
+			    }
+			  }));
+			}
+
+			mainContext.add(grid);
+			})
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

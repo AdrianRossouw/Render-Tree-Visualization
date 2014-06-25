@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<script src="http://famo.us/lib/alameda.min.js"></script>
+		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
+		<script>
+     require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/core/Transform'], function (Engine, StateModifier, Surface, Transform) {
+
+				var mainContext = Engine.createContext();
+
+				var translateModifierOne = new StateModifier({
+				transform: Transform.translate(200, 0, 0)
+				});
+
+				var translateModifierTwo = new StateModifier({
+				transform: Transform.translate(200, 0, 0)
+				});
+
+				var rotateModifierOne = new StateModifier({
+				transform: Transform.rotateZ(Math.PI/4)
+				});
+
+				var rotateModifierTwo = new StateModifier({
+				transform: Transform.rotateZ(Math.PI/4)
+				});
+
+				var redSurface = new Surface({
+				size: [100, 100],
+				classes: ['red-bg']
+				});
+
+				var greySurface = new Surface({
+				size: [100, 100],
+				classes: ['grey-bg']
+				});
+
+				mainContext
+				.add(translateModifierOne)
+				.add(rotateModifierOne)
+				.add(redSurface);
+
+				mainContext
+				.add(rotateModifierTwo)
+				.add(translateModifierTwo)
+				.add(greySurface);
+
+				  			window.ctx = mainContext
+			})
+		</script>
+		<script src="../vis.js"></script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<script src="http://famo.us/lib/alameda.min.js"></script>
+		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
+		<script>
+			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/SequentialLayout'], function (Engine, StateModifier, Surface, SequentialLayout) {
+			var mainContext = Engine.createContext();
+
+			var sequentialLayout = new SequentialLayout();
+
+			var surfaces = [];
+
+			sequentialLayout.sequenceFrom(surfaces);
+
+			for (var i = 0; i < 10; i++) {
+			surfaces.push(new Surface({
+			size: [undefined, 50],
+			properties: {
+			backgroundColor: "hsl(" + (i * 360 / 10) + ", 100%, 50%)",
+			}
+			}));
+			}
+
+			mainContext.add(sequentialLayout);
+			window.ctx = mainContext
+			})
+		</script>
+		<script src="../vis.js"></script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<script src="http://famo.us/lib/alameda.min.js"></script>
+		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
+		<script>
+ 
+    require(['../vis', 'famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/FlexibleLayout'], function (vis, Engine, StateModifier, Surface, FlexibleLayout) {
+
+			var mainContext = Engine.createContext();
+
+			var colors = [
+			'rgba(256, 0, 0, .7)',
+			'rgba(0, 256, 0, .7)',
+			'rgba(0, 0, 256, .7)'
+			];
+
+			var ratios = [1, true, 1];
+			var layout = new FlexibleLayout({
+			ratios: ratios
+			});
+
+			var surfaces = [];
+
+			for (var i = 0; i < 3; i++) {
+			var size = i === 1 ? [20, undefined] : [undefined, undefined];
+			surfaces.push(new Surface({
+			size: size,
+			properties: {
+			backgroundColor: colors[i % 3]
+			}
+			}));
+			}
+
+			layout.sequenceFrom(surfaces);
+
+			var mod = new StateModifier({
+			size: [400, 400]
+			});
+
+			mainContext.add(mod).add(layout);
+			
+  		vis(mainContext)
+	  		
+			})
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
