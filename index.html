@@ -57,15 +57,14 @@
 	  var src ="examples/" + text  + '.html'
   	iframe.src = src
 		fetch(src, function () {
-
-		document.querySelector('code').textContent = parseHTML(this.responseText) })
-  })
+	  		document.querySelector('code').textContent = parseHTML(this.responseText) })
+		})
 	}
 
 	function fetch (url, cb) {
    	var get = new XMLHttpRequest()
 		get.onload = cb
-		get.open('get', window.location.origin + '/' + url)
+		get.open('get', window.location.href + url)
 		get.send()
 		}
 		

@@ -74,7 +74,7 @@ define(['d3'], function (d3) {
                 .attr('stroke', 'white')
                 .on('mouseover', function (d) {
                     d3.select(this).interrupt().attr('r', 20)
-                    console.log(d)
+                    if (options.log) console.log(d)
                     desc.on('hover').call(desc, d)
                 })
                 .on('mouseout', function () {
