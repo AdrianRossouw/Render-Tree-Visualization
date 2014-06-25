@@ -167,12 +167,14 @@ define(['d3'], function (d3) {
         }
 
         function nodeFill(d) {
-            if (d._isRenderable) {
-                if (d._object.constructor.name.match(/View/)) return 'orange'
-                if (d._object.constructor.name.match(/Surface/)) return 'indianred'
-            }
-            if (d._isModifier) return 'darkgreen'
-            if (d.type === 'Context') return 'grey'
+            var obj = d._object || {}
+            if (obj.constructor.name.match(/Layout/i)) return '#7851A9'
+            if (d.constructor.name.match(/Sequence/)) return 'pink'
+            if (d.classList) return 'indianred'
+            if (obj.constructor.name.match(/view/i)) return 'orange'
+            if (obj.constructor.name.match(/Surface/i)) return 'indianred'
+            if (d._isModifier || obj._modifier) return 'blue'
+            if (d.constructor.name === 'Context') return 'darkgreen'
         }
 
         function formatDesc(d) {
@@ -215,14 +217,14 @@ define(['d3'], function (d3) {
             d.id = registry.push(d)
 
             //TODO handle viewSEQ
-            if (d._) return d._.array.map(Object.create)
+            if (d._) return d._.array//.map(Object.create)
 
             var children = (d._node && d._node._child) ? d._node._child : d._child
             var obj = d._object || {}
             if (obj._nodes) return obj._nodes
 
-            if (obj.sequence) return obj.sequence._.array.map(Object.create)   
-            if (obj._items) return obj._items._.array
+            if (obj.sequence) return obj.sequence._.array//.map(Object.create)
+            if (obj._items) return obj._items._.array//.map(Object.create)
 
             if (! children && obj && obj._node) children = obj._node._child
             
