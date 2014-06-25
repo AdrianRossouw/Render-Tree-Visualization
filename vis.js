@@ -181,7 +181,9 @@ define(['d3'], function (d3) {
             this.interrupt().style('opacity', 1)
 
             var out = Object.keys(model).map(function (k) {
-                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + JSON.stringify(model[k], null, 2)  + '</div>'
+                try { var val = JSON.stringify(model[k], null, 2) }
+                catch (e){ var val = '' }
+                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + model[k]  + '</div>'
             }).join('')
             this.html(out)
         }
