@@ -3,11 +3,10 @@
 		<script src="http://famo.us/lib/alameda.min.js"></script>
 		<script src="http://code.famo.us/famous/0.2/famous.js"></script>		
 		<script>
-			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/Scrollview'], function (Engine, StateModifier, Surface, Scrollview) {
+			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/Scrollview', '../vis'], function (Engine, StateModifier, Surface, Scrollview, vis) {
 			var mainContext = Engine.createContext();
-			window.ctx = mainContext
-			console.log(window.ctx)
-
+			vis(mainContext)
+			
 			var surfaces = [];
 			var scrollview = new Scrollview();
 
@@ -16,15 +15,15 @@
 			scrollview.sequenceFrom(surfaces);
 
 			for (var i = 0; i < 40; i++) {
-			var surface = new Surface({
-			size: [undefined, 200],
-			content: 'Surface ' + i,
-			properties: {
-			textAlign: 'center',
-			lineHeight: '200px',
-			color: 'white',
-			backgroundColor: "hsl(" + (i * 360 / 20) + ", 100%, 50%)",
-			}
+			  var surface = new Surface({
+			    size: [undefined, 200],
+			    content: 'Surface ' + i,
+			    properties: {
+			      textAlign: 'center',
+			      lineHeight: '200px',
+			      color: 'white',
+			      backgroundColor: "hsl(" + (i * 360 / 20) + ", 100%, 50%)",
+			   }
 			});
 
 			surfaces.push(surface);
@@ -32,11 +31,8 @@
 			surface.pipe(scrollview);
 			
 			}
-			
-			
 			})
 		</script>
-		<script src="../vis.js"></script>
 	</head>
 	<body>
 	</body>

@@ -3,10 +3,9 @@
 		<script src="http://famo.us/lib/alameda.min.js"></script>
 		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
 		<script>
-			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/core/Transform', 'famous/core/View'], function (Engine, StateModifier, Surface, Transform, View) {
-
-
+			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/core/Transform', 'famous/core/View', '../vis.js'], function (Engine, StateModifier, Surface, Transform, View, vis) {
 			var mainContext = Engine.createContext();
+			vis(mainContext)
 
 			var viewSize = [undefined, 400];
 
@@ -56,10 +55,9 @@
 			});
 
 			sizeNode.add(tabOriginModifier).add(tab);
-  			window.ctx = mainContext
 			})
 		</script>
-		<script src="../vis.js"></script>
+
 	</head>
 	<body>
 	</body>

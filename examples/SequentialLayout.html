@@ -3,9 +3,9 @@
 		<script src="http://famo.us/lib/alameda.min.js"></script>
 		<script src="http://code.famo.us/famous/0.2/famous.js"></script>
 		<script>
-			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/SequentialLayout'], function (Engine, StateModifier, Surface, SequentialLayout) {
+			require(['famous/core/Engine', 'famous/modifiers/StateModifier', 'famous/core/Surface', 'famous/views/SequentialLayout', '../vis.js'], function (Engine, StateModifier, Surface, SequentialLayout, vis) {
 			var mainContext = Engine.createContext();
-
+			vis(mainContext)
 			var sequentialLayout = new SequentialLayout();
 
 			var surfaces = [];
@@ -22,10 +22,8 @@
 			}
 
 			mainContext.add(sequentialLayout);
-			window.ctx = mainContext
 			})
 		</script>
-		<script src="../vis.js"></script>
 	</head>
 	<body>
 	</body>

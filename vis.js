@@ -1,14 +1,13 @@
 require.config({
-  paths: {
-    d3: "http://d3js.org/d3.v3.min"
-  }
+    paths: {
+        d3: "http://d3js.org/d3.v3.min"
+    }
 });
 define(['d3'], function (d3) {
     var ROUND_TRANSFORM_DECIMALPLACES = 3
+    var Transform = require('famous/core/Transform')
     
-    return vis
-
-    function vis(context, container) {
+    return function RenderTreeVisualizer(context, container) {
         var sync = d3.dispatch("eventFired")
         var subscriptions = []
         var id = -1
@@ -42,6 +41,7 @@ define(['d3'], function (d3) {
                 .style('position', 'absolute')
                 .style('top', '0px')
                 .style('left', '0px')
+                .style('z-index', 123123)
 
         var node = svg.selectAll(".node"),
             link = svg.selectAll(".link")
@@ -70,8 +70,8 @@ define(['d3'], function (d3) {
                 .attr('fill', nodeFill)
                 .attr("r", 0)
                 .attr('stroke', 'white')
-            //.attr('stroke-width', 4)
                 .on('mouseover', function (d) {
+                    console.log(d)
                     zoomCircle(this, 20)
                     desc.on('hover').call(desc, d)
                 })
@@ -130,129 +130,144 @@ define(['d3'], function (d3) {
                 if (i == n.size()-1) update(function (d, i) { return 0 })
             })
         }
-    }
 
-    function nodeContents(node) {
-        if (node._isRenderable) {
+        function nodeContents(node) {
+            if (node._isRenderable) {
+                return {
+                    transform: node._object._matrix,
+                    type: node._object.constructor.name
+                }
+            }
+
+            if (node._isModifier) {
+                return extend({ type: node._object.constructor.name },
+                              (node._object._output || node._object._modifier._output)
+                             )
+            }
+
             return {
-                transform: node._object._matrix,
-                type: node._object.constructor.name
+                type: node.constructor.name
             }
         }
 
-        if (node._isModifier) return extend(node._object._output, { type: node._object.constructor.name})
+        function extend (a, b) {
 
-        return {
-            type: node.constructor.name
-        }
-    }
-
-    function extend (a, b) {
-        Object.keys(b).forEach(function (k) { a[k] = b[k] })
-        return a
-    }
-
-    function filterObject(obj){
-        if (! obj) return {}
-        for(var key in obj) if (null == obj[key]) delete obj[key]
-        processTransform(obj)
-        if (obj.opacity === 1) delete obj.opacity
-
-        delete obj.target
-        return obj
-    }
-
-
-
-    function nodeFill(d) {
-        if (d._isRenderable) {
-            if (d._object.constructor.name.match(/View/)) return 'orange'
-            if (d._object.constructor.name.match(/Surface/)) return 'indianred'
-        }
-        if (d._isModifier) return 'darkgreen'
-        if (d.type === 'Context') return 'grey'
-    }
-
-    function formatDesc(d) {
-        var model = filterObject(nodeContents(d))
-        this.interrupt().style('opacity', 1)
-
-        var out = Object.keys(model).map(function (k) {
-            return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + model[k] + '</div>'
-        })
-                .join('')
-        this.html(out)
-    }
-
-    function isInherited(d, key) {
-        if (key == 'type') return ''
-        return (d._isRenderable ? 'inherited' : '')
-    }
-
-    function label(k) {
-        return '<span class="label">' + k  + '</span>'
-    }
-
-    function upcase(str) {
-        str = str.split('')
-        str[0] = str[0].toUpperCase()
-        return str.join('')
-    }
-
-    function delay (d) { return (d.depth == null ? 1 + d.source.depth : d.depth) * 500 }
-
-    function subscribe(emitter, renderNode) {
-        if (subscriptions.indexOf(emitter) == -1) subscriptions.push(emitter)
-        else return
-        emitter.pipe(function (name, e){
-            sync.eventFired(renderNode)
-        })
-    }
-
-    function traverse(d) {
-        d.id = registry.push(d)
-        var children = (d._node && d._node._child) ? d._node._child : d._child
-        if (d._object && d._object.context) {
-            children = d.children = d._object.context
+            Object.keys(b).forEach(function (k) { a[k] = b[k] })
+            return a
         }
 
-        children = children || []
-        d.children = children.map ? children : [children]
-        d.children.forEach(function (child) {
-            child.px = d.x; child.py = d.y;
-            if (child._isRenderable) child._object.on('mouseover', function () { sync.eventFired(d) })
-            if ((child._object || {}).pipe)  subscribe(child._object, d)
-        })
+        function filterObject(obj){
+            if (! obj) return {}
+            for(var key in obj) if (null == obj[key]) delete obj[key]
+            processTransform(obj)
+            if (obj.opacity === 1) delete obj.opacity
 
-        return d.children
-    }
-
-    var identities = { 
-        translate: '0,0,0', rotate: '0,0,0', scale: '1,1,1', skew: '0,0,0'
-    }
-
-    function  processTransform(obj) {
-        var mat = obj.transform || '1000010000100001'.split('')
-        delete obj.transform
-        if (mat && mat.join('') == '1000010000100001') return
-        var decompose = require('famous/core/transform').interpret(mat)
-        for(var i in identities) {
-            if (decompose[i].join(',') == identities[i]) { delete decompose[i]; continue }
-            if (decompose[i].filter(function (d) { return ! (isNaN(d) || d == null) }).length < 3) delete decompose[i]
-            else decompose[i] = decompose[i].map(function (val) { return Math.round(val * 100) / 100 }).join(', ')
+            delete obj.target
+            return obj
         }
-        extend(obj, decompose)
-    }
-    function trackEvents() {}
-    function identity (d) { return d }
-    function zoomCircle(node, val) {
-        d3.transition().duration(750).call(function (transition) {
-            transition.tween(function () {
-                return function (i) {
-                    node.attr('r', 10 + (10 * i))
-                }
 
+        function nodeFill(d) {
+            if (d._isRenderable) {
+                if (d._object.constructor.name.match(/View/)) return 'orange'
+                if (d._object.constructor.name.match(/Surface/)) return 'indianred'
+            }
+            if (d._isModifier) return 'darkgreen'
+            if (d.type === 'Context') return 'grey'
+        }
+
+        function formatDesc(d) {
+            var model = filterObject(nodeContents(d))
+            this.interrupt().style('opacity', 1)
+
+            var out = Object.keys(model).map(function (k) {
+                return '<div class="' + isInherited(d, k)  +  '">' + label(k) + ': '  + model[k] + '</div>'
             })
-        })
+                    .join('')
+            this.html(out)
+        }
+
+        function isInherited(d, key) {
+            if (key == 'type') return ''
+            return (d._isRenderable ? 'inherited' : '')
+        }
+
+        function label(k) {
+            return '<span class="label">' + upcase(k)  + '</span>'
+        }
+
+        function upcase(str) {
+            str = str.split('')
+            str[0] = str[0].toUpperCase()
+            return str.join('')
+        }
+
+        function delay (d) { return (d.depth == null ? 1 + d.source.depth : d.depth) * 500 }
+
+        function subscribe(emitter, renderNode) {
+            if (subscriptions.indexOf(emitter) == -1) subscriptions.push(emitter)
+            else return
+            emitter.pipe(function (name, e){
+                sync.eventFired(renderNode)
+            })
+        }
+
+        function traverse(d) {
+            d.id = registry.push(d)
+
+            //TODO handle viewSEQ
+            if (d._) return d._.array.map(Object.create)
+
+            var children = (d._node && d._node._child) ? d._node._child : d._child
+            var obj = d._object || {}
+            if (obj._nodes) return obj._nodes
+
+            if (obj.sequence) return obj.sequence._.array.map(Object.create)   
+            if (obj._items) return obj._items._.array
+
+            if (! children && obj && obj._node) children = obj._node._child
+            
+            if (obj.context) { children = obj.context } 
+
+            if (obj._scroller) children = obj._scroller._node
+            
+            children = children ? (children.map ? children : [children]) : []
+
+            //handle views && layouts
+            if(! children.length && obj) {
+                for(var k in obj)
+                    if ((obj[k] || {}).add) children.push(obj[k])
+            }
+
+            return children
+        }
+
+        var identities = { 
+            translate: '0,0,0', rotate: '0,0,0', scale: '1,1,1', skew: '0,0,0'
+        }
+
+        function  processTransform(obj) {
+            var mat = obj.transform || '1000010000100001'.split('')
+            delete obj.transform
+            if (mat && mat.join('') == '1000010000100001') return
+            var decompose = Transform.interpret(mat)
+            for(var i in identities) {
+                if (decompose[i].join(',') == identities[i]) { delete decompose[i]; continue }
+                if (decompose[i].filter(function (d) { return ! (isNaN(d) || d == null) }).length < 3) delete decompose[i]
+                else decompose[i] = decompose[i].map(function (val) { return Math.round(val * 100) / 100 }).join(', ')
+            }
+            extend(obj, decompose)
+        }
+        function trackEvents() {}
+        function identity (d) { return d }
+        function zoomCircle(node, val) {
+            d3.transition().duration(750).call(function (transition) {
+                transition.tween(function () {
+                    return function (i) {
+                        node.attr('r', 10 + (10 * i))
+                    }
+
+                })
+            })
+        }
     }
 })
