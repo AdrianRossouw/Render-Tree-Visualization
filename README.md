@@ -11,15 +11,22 @@ var Engine = require('famous/core/Engine')
 var Modifier = require('famous/core/Modifier')
 var vis = require('vis')
 
-bvar twigs = [ctx.add(new Modifier)]
+			var ctx = Engine.createContext()
+      var nodes = [ctx.add(new Modifier)]
+			
+			vis(ctx)
+			;(function repeat() {
+			  var mod = nodes[Math.random() * nodes.length | 0]
+				.add(new Modifier({origin: [1,2].map(Math.random), opacity: .5}))
+				mod.add(new Surface({
+				  properties:  { background: randomColor() },
+					size: [200, 200]
+			  }))
 
-var ctx = Engine.createContext()
-vis(ctx)
-(function repeat() {
-  twigs[Math.random() * list.length | 0]
-  .push(ctx.add(new Modifier))
-
-  setTimeout(repeat, Math.random() * 1000)
+			  nodes.push(mod)
+  
+		setTimeout(repeat, Math.random() * 1000)
+		function randomColor() { return 'hsl(' + Math.random() * 360  + ',80%, 80%)' }
 })()
 ```
 
