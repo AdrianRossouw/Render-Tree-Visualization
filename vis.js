@@ -39,10 +39,8 @@ define(['d3'], function (d3) {
 
         var svg = d3.select(options.container).append('svg')
                 .attr("height", height)
-                .style('background', 'rgba(255, 255, 255, .5)')
                 .style('position', 'absolute')
                 .style('padding-top', '10px')
-                .style('z-index', 123123)
 
         var node = svg.selectAll(".node"),
             link = svg.selectAll(".link")
@@ -54,7 +52,6 @@ define(['d3'], function (d3) {
                     position: 'absolute',
                     top: '0px',
                     left: svg.node().offsetLeft,
-                    color: '#333',
                     padding: '5px',
                     'font-family': 'Helvetica'
                 })
@@ -66,12 +63,10 @@ define(['d3'], function (d3) {
             link = link.data(tree.links(nodes), function (d) { return d.source._id  + ':' + d.target._id })
 
             node.enter().append("circle")
-                .attr("class", "node")
+                .attr("class", function (d) { return "node " + nodeContents(d).type })
                 .attr("cx", function(d) { return d.x; })
                 .attr("cy", function(d) { return d.y; })
-                .attr('fill', nodeFill)
                 .attr("r", 0)
-                .attr('stroke', 'white')
                 .on('mouseover', function (d) {
                     d3.select(this).interrupt().attr('r', 20)
                     if (options.log) console.log(d)
@@ -86,7 +81,6 @@ define(['d3'], function (d3) {
                 .attr("class", "link")
                 .attr('stroke-width', '1')
                 .attr('fill', 'none')
-                .attr('stroke', '#999')
                 .attr("d", diagonal)
                 .attr('stroke-dasharray', function () { return '0,' + this.getTotalLength() })
 

@@ -82,6 +82,42 @@ svg {
     left: 50%;
 }
 
-
 .grey-bg { background: lavender; }
 .red-bg { background: indianred; }
+
+svg { background: hsl(180, 5%, 15%); }
+circle { fill: white; } 
+path {stroke: white;} 
+
+
+.desc {
+    color: white;
+}
+circle {stroke: hsl(180, 5%, 15%);}
+.Draggable{ fill:rgb(193, 136, 234);}
+.StateModifier{fill:rgb(152, 136, 234);}
+.Surface { fill: indianred; }
+.Fader{ fill: rgb(136, 201, 234);}
+.ModifierChain{fill:rgb(136, 140, 234);}
+.RenderNode{fill:white}
+.ViewSequence{fill:rgb(136, 181, 234);}
+.ContextualView{fill:rgb(136, 234, 226);}
+.Deck{fill:rgb(136, 222, 234);}
+.EdgeSwapper{fill:rgb(136, 234, 205);}
+.FlexibleLayout{fill:rgb(136, 234, 185);}
+.Flipper{fill:rgb(136, 234, 164);}
+.GridLayout{fill:rgb(136, 234, 144);}
+.HeaderFooterLayout{fill:rgb(148, 234, 136);}
+.Lightbox{fill:rgb(169, 234, 136);}
+.RenderController{fill:rgb(189, 234, 136);}
+.ScrollContainer{fill:rgb(209, 234, 136) ;}
+.Scroller{fill:rgb(230, 234, 136);}
+.Scrollview{fill:rgb(234, 197, 136);}
+.SequentialLayout{fill:rgb(234, 177, 136);}
+.CanvasSurface{fill:rgb(234, 136, 136);}
+.ContainerSurface{fill: rgb(234, 156, 136);}
+.ImageSurface{fill:rgb(234, 136, 136);}
+.InputSurface{fill: rgb(234, 156, 136);}
+.TextareaSurface {fill:rgb(234, 218, 136);}
+.VideoSurface{fill: rgb(214, 136, 234);}
+.View{fill: rgb(214, 136, 234);}
