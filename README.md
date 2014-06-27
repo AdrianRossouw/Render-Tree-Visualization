@@ -6,30 +6,29 @@ it to your bookmark bar. [Install Render Tree Bookmarklet](http://adnan-wahab.gi
 
 
 ## Usage
-``` js
-var Engine = require('famous/core/Engine')
-var Modifier = require('famous/core/Modifier')
-var vis = require('vis')
-
-			var ctx = Engine.createContext()
-      var nodes = [ctx.add(new Modifier)]
-			
-			vis(ctx)
-			;(function repeat() {
-			  var mod = nodes[Math.random() * nodes.length | 0]
-				.add(new Modifier({origin: [1,2].map(Math.random), opacity: .5}))
-				mod.add(new Surface({
-				  properties:  { background: randomColor() },
-					size: [200, 200]
-			  }))
-
-			  nodes.push(mod)
-  
-		setTimeout(repeat, Math.random() * 1000)
-		function randomColor() { return 'hsl(' + Math.random() * 360  + ',80%, 80%)' }
-})()
 ```
+require(['famous/core/Engine', 'famous/core/Modifier', 'famous/core/Surface', 'famous/core/Transform', 'famous/core/View', '../vis.js'],
+function (Engine, Modifier, Surface, Transform, View, vis) {
 
+var ctx = Engine.createContext()
+      var nodes = [ctx.add(new Modifier)]
+
+vis(ctx)
+;(function repeat() {
+  var mod = nodes[Math.random() * nodes.length | 0]
+  .add(new Modifier({origin: [1,2].map(Math.random), opacity: .8}))
+  mod.add(new Surface({
+    properties:  { background: randomColor() },
+    size: [Math.random() * 200, Math.random() * 200]
+    }))
+
+  nodes.push(mod)
+
+setTimeout(repeat, Math.random() * 2000)
+function randomColor() { return 'hsl(' + Math.random() * 360  + ',100%, 50%)' }
+})()
+})
+```
 the vis function takes 2 arguments
 [required]the context or renderNode
 [optional]an object enumerating a list of choices including
